@@ -1,6 +1,7 @@
-const express = require("express");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+
+const passport = require("passport");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/user-model");
@@ -35,7 +36,7 @@ exports.signup_post = [
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const user = new User({ username, hashedPassword });
+      const user = new User({ username: username, password: hashedPassword });
       await user.save();
       res.status(201).json({ message: "User created successfully" });
     } catch (error) {
@@ -44,3 +45,22 @@ exports.signup_post = [
     }
   }),
 ];
+
+exports.login_post = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+    if (!user) {
+      return res.status(401).json({ message: info.message });
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Internal server error" });
+      }
+      return res.status(200).json({ message: "Logged in successfully" });
+    });
+  })(req, res, next);
+};

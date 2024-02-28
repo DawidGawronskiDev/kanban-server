@@ -5,6 +5,11 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
+const passport = require("passport");
+const session = require("express-session");
+
+require("./config/passport-config");
+
 // stric mode
 mongoose
   .connect(process.env.DATABASE_URI)
@@ -16,7 +21,7 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: process.env.SECRECT_KEY,
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
   }),
