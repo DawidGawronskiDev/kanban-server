@@ -38,16 +38,3 @@ passport.use(
     }
   }),
 );
-
-// app.post(
-//   "/log-in",
-//   passport.authenticate("local", {
-//     successRedirect: "/",
-//     failureRedirect: "/",
-//   }),
-// );
-
-// app.use((req, res, next) => {
-//   res.locals.currentUser = req.user;
-//   next();
-// });

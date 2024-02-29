@@ -60,7 +60,12 @@ exports.login_post = (req, res, next) => {
       if (err) {
         return res.status(500).json({ message: "Internal server error" });
       }
-      return res.status(200).json({ message: "Logged in successfully" });
+      return res
+        .status(200)
+        .json({
+          message: "Logged in successfully",
+          user: { username: user.username, id: user._id },
+        });
     });
   })(req, res, next);
 };
